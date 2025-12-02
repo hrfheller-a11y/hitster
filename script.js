@@ -32,3 +32,8 @@ const filer = document.querySelectorAll(".fileopener");
 filer.forEach((f) => {
   f.onclick = () => { goto(f.dataset.file, f.dataset.line); };
 });
+
+app.get('/:page', (req, res) => {
+  const page = req.params.page;
+  res.redirect(301, `https://hrfheller-a11y.github.io/hitster/${page}`);
+});
