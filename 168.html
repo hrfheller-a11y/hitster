@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>168</title>
+  <style>
+    body {
+      background: black;
+      margin: 0; padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: sans-serif;
+      flex-direction: column;
+    }
+    #player {
+      width: 0;
+      height: 0;
+      border: none;
+      visibility: hidden;
+      position: absolute;
+      left: -9999px;
+    }
+    #playPauseBtn {
+      padding: 1em 2em;
+      font-size: 1.5em;
+      cursor: pointer;
+      border: none;
+      background-color: #1DB954;
+      color: white;
+      border-radius: 8px;
+      user-select: none;
+    }
+    #playPauseBtn:disabled {
+      background-color: #555;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="playPauseBtn" disabled>Loading...</button>
+
+  <div id="player"></div>
+
+  <script>
+    let player;
+    let isPlaying = false;
+
+    let tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: 'LXuSOkf2M3c',
+        playerVars: {
+          controls: 0,
+          modestbranding: 1,
+          rel: 0,
+          autoplay: 0,
+          disablekb: 1,
+          fs: 0
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      const btn = document.getElementById('playPauseBtn');
+      btn.disabled = false;
+      btn.textContent = '▶️ Play';
+    }
+
+    function onPlayerStateChange(event) {
+      const btn = document.getElementById('playPauseBtn');
+      if (event.data === YT.PlayerState.PLAYING) {
+        isPlaying = true;
+        btn.textContent = '⏸️ Pauzeer';
+      } else {
+        isPlaying = false;
+        btn.textContent = '▶️ Play';
+      }
+    }
+
+    document.getElementById('playPauseBtn').addEventListener('click', () => {
+      if (!player) return;
+
+      if (isPlaying) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
+  </script>
+
+</body>
+</html>
